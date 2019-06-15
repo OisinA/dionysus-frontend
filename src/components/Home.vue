@@ -1,9 +1,7 @@
 <template>
   <div class="home">
-    <h1 class="title">Users</h1>
-    <div v-for="project in projects" v-bind:key="project.id">
-      <p class="title">{{project.username}}</p>
-    </div>
+    <h1 class="title">Please <router-link to="/login">login</router-link> to continue.</h1>
+    <h1 class="subtitle">thanks <3</h1>
   </div>
 </template>
 
@@ -13,12 +11,6 @@ import axios from 'axios';
 
 @Component
 export default class Home extends Vue {
-  @Prop() projects!: string[];
 
-  mounted() {
-    axios.get('http://localhost:8070/user').then((response) => {
-      this.projects = response.data.content;
-    });
-  }
 }
 </script>

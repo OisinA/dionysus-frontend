@@ -27,8 +27,8 @@
       <router-view></router-view>
     </div>
 
-    <footer class="footer">
-      <div class="content has-text-centered">
+    <footer class="footer has-background-white">
+      <div class="content has-text-centered has-background-white">
         <p>
           powered by <a href="https://github.com/OisinA/dionysus">dionysus</a>.
         </p>
