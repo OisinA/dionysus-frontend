@@ -25,7 +25,7 @@ export default class Profile extends Vue {
             this.$router.push('/login')
         }
         var u = '';
-        axios.get('http://localhost:8070/token_to_id', {
+        axios.get(process.env.VUE_APP_API_URL + '/token_to_id', {
                 headers: {
                     Token: this.$cookies.get("token"),
                 }
@@ -33,7 +33,7 @@ export default class Profile extends Vue {
             this.user_id = response.data.content.user_id;
         }).then((response) => {
             console.log("yes2");
-            axios.get('http://localhost:8070/user/' + this.user_id, {
+            axios.get('/api/user/' + this.user_id, {
                 headers: {
                     Token: this.$cookies.get("token"),
                 }

@@ -46,7 +46,8 @@ export default class Login extends Vue {
         bcrypt.hash(this.password, 4, function(err, hash) {
             hash_password = hash;
         })
-        axios.post('http://localhost:8070/login', {
+        console.log(process.env)
+        axios.post(process.env.VUE_APP_API_URL + '/login', {
             Username: this.username,
             Password: hash_password,
         }).then((response) => {
