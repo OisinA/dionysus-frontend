@@ -15,7 +15,7 @@
         </div>
         <div class="field">
             <div class="control">
-                <button class="button is-success" v-on:click="login()">Login</button>
+                <button class="button pinkButton" v-on:click="login()">Login</button>
             </div>
         </div>
     </form>

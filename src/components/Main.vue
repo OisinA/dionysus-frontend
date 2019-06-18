@@ -30,7 +30,7 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          powered by <a href="https://github.com/OisinA/dionysus">dionysus</a>.
+          powered by <a class="dionysus" href="https://github.com/OisinA/dionysus">dionysus</a>.
         </p>
       </div>
     </footer>

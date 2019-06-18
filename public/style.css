@@ -10,3 +10,8 @@
 footer .footer {
     background-color: white;
 }
+
+.pinkButton {
+    background-color: #FD759B;
+    color: white;
+}
