@@ -27,6 +27,18 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import axios from 'axios'
 import * as bcrypt from 'bcrypt-pbkdf'
 
+export async function hash_password(password: string) {
+    new Promise<string>((resolve, reject) => {
+        let hashed: string;
+        await bcrypt.hash(password, 4, (err, hash) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(hash);
+        });
+    })
+}
+
 @Component
 export default class Login extends Vue {
     username = '';
@@ -41,14 +53,12 @@ export default class Login extends Vue {
         }
     }
 
-    login() {
-        var hash_password;
-        bcrypt.hash(this.password, 4, function(err, hash) {
-            hash_password = hash;
-        })
+    async login() {
+        var hashed = await hash_password(this.password);
+        console.log(this.username, this.password, hashed);
         axios.post('http://localhost:8070/login', {
             Username: this.username,
-            Password: hash_password,
+            Password: hashed,
         }).then((response) => {
             if(response.data.status_code != 200) {
                 this.error_message = `
@@ -64,17 +74,6 @@ export default class Login extends Vue {
                 `;
             } else {
                 this.$cookies.set("token", response.data.content.token);
-                this.error_message = `
-                <article class="message is-success"> 
-                    <div class="message-header">
-                        <p>Success</p>
-                        <button class="delete" aria-label="delete"></button>
-                    </div>
-                    <div class="message-body">
-                        Successfully logged in! Redirecting...
-                    </div>
-                </article>
-                `;
                 this.$router.push('/profile')
             }
         }).catch((error) => {
@@ -91,7 +90,6 @@ export default class Login extends Vue {
                 </article>
                 `;
         });
-        console.log(this.username + " " + this.password)
     }
 }
 </script>
