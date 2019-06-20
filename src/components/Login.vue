@@ -15,7 +15,7 @@
         </div>
         <div class="field">
             <div class="control">
-                <button class="button is-success" v-on:click="login()">Login</button>
+                <button class="button pinkButton" v-on:click="login()">Login</button>
             </div>
         </div>
     </form>
@@ -30,7 +30,7 @@ import * as bcrypt from 'bcrypt-pbkdf'
 export async function hash_password(password: string) {
     new Promise<string>((resolve, reject) => {
         let hashed: string;
-        await bcrypt.hash(password, 4, (err, hash) => {
+        bcrypt.hash(password, 4, (err, hash) => {
             if(err) {
                 reject(err);
             }
