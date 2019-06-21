@@ -39,8 +39,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class App extends Vue {
-    
+    login = '';
+
+    data() {
+        return {
+            login: '',
+        }
+    }
+
+    mounted() {
+      if(this.$cookies.get("token")) {
+        this.login = 'Profile';
+      } else {
+        this.login = 'Login';
+      }
+    }
 }
 </script>

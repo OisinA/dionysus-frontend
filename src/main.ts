@@ -5,6 +5,7 @@ import VueCookies from 'vue-cookies'
 import Home from './components/Home.vue';
 import Login from './components/Login.vue';
 import Profile from './components/Profile.vue';
+import Logout from './components/Logout.vue';
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
@@ -22,6 +23,10 @@ const routes = [
       {
         path: '/profile',
         component: Profile,
+      },
+      {
+        path: '/logout',
+        component: Logout,
       },
 ];
 

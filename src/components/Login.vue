@@ -25,19 +25,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import axios from 'axios'
-import * as bcrypt from 'bcrypt-pbkdf'
-
-export async function hash_password(password: string) {
-    new Promise<string>((resolve, reject) => {
-        let hashed: string;
-        bcrypt.hash(password, 4, (err, hash) => {
-            if(err) {
-                reject(err);
-            }
-            resolve(hash);
-        });
-    })
-}
 
 @Component
 export default class Login extends Vue {
@@ -53,12 +40,16 @@ export default class Login extends Vue {
         }
     }
 
-    async login() {
-        var hashed = await hash_password(this.password);
-        console.log(this.username, this.password, hashed);
+    mounted() {
+        if(this.$cookies.get("token")) {
+            this.$router.push('/profile')
+        }
+    }
+
+    login() {
         axios.post('http://localhost:8070/login', {
             Username: this.username,
-            Password: hashed,
+            Password: this.password,
         }).then((response) => {
             if(response.data.status_code != 200) {
                 this.error_message = `
@@ -74,7 +65,7 @@ export default class Login extends Vue {
                 `;
             } else {
                 this.$cookies.set("token", response.data.content.token);
-                this.$router.push('/profile')
+                this.$router.push('/profile');
             }
         }).catch((error) => {
             console.log(error);

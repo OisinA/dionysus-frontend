@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <h1 class="title">Please <router-link to="/login">login</router-link> to continue.</h1>
-    <h1 class="subtitle">thanks <3</h1>
+    <h1 class="title">Competition</h1>
+    <p class="subtitle">Starts in 4 days</p>
   </div>
 </template>
 
@@ -11,6 +11,10 @@ import axios from 'axios';
 
 @Component
 export default class Home extends Vue {
-
+    mounted() {
+        if(!this.$cookies.get("token")) {
+            this.$router.push('/login');
+        }
+    }
 }
 </script>
