@@ -17,7 +17,7 @@
           <router-link to="/" class="navbar-item">Home</router-link>
         </div>
         <div class="navbar-end">
-          <router-link to="/login" class="navbar-item" href="#login">Login</router-link>
+          <router-link to="/login" class="navbar-item" href="#login">{{this.$cookies.get("token") ? 'Profile' : 'Login'}}</router-link>
         </div>
       </div>
 
@@ -41,20 +41,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class App extends Vue {
-    login = '';
-
-    data() {
-        return {
-            login: '',
-        }
-    }
-
-    mounted() {
-      if(this.$cookies.get("token")) {
-        this.login = 'Profile';
-      } else {
-        this.login = 'Login';
-      }
-    }
+    
 }
 </script>

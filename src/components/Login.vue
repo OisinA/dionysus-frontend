@@ -2,7 +2,17 @@
   <div class="login">
     <h1 class="title">Login</h1>
     <form class="form">
-        <div v-if="error_message" v-html="error_message" class="field"></div>
+        <div v-if="error_message" class="field">
+            <article class="message is-danger"> 
+                <div class="message-header">
+                    <p>Warning</p>
+                    <button class="delete" aria-label="delete"></button>
+                </div>
+                <div class="message-body">
+                    {{error_message}}
+                </div>
+            </article>
+        </div>
         <div class="field">
             <div class="control">
                 <input class="input" v-model="username" type="text" placeholder="Username">
@@ -51,35 +61,18 @@ export default class Login extends Vue {
             Username: this.username,
             Password: this.password,
         }).then((response) => {
-            if(response.data.status_code != 200) {
-                this.error_message = `
-                <article class="message is-danger"> 
-                    <div class="message-header">
-                        <p>Warning</p>
-                        <button class="delete" aria-label="delete"></button>
-                    </div>
-                    <div class="message-body">
-                        ` + response.data + `
-                    </div>
-                </article>
-                `;
-            } else {
-                this.$cookies.set("token", response.data.content.token);
-                this.$router.push('/profile');
-            }
+            this.$cookies.set("token", response.data.content.token);
+            this.$router.push('/profile');
         }).catch((error) => {
             console.log(error);
-            this.error_message = `
-                <article class="message is-danger"> 
-                    <div class="message-header">
-                        <p>Warning</p>
-                        <button class="delete" aria-label="delete"></button>
-                    </div>
-                    <div class="message-body">
-                        Incorrect login details.
-                    </div>
-                </article>
-                `;
+            if(error.response.data.status_code == 403) {
+                this.error_message = "Login details incorrect.";
+                return;
+            } else {
+                this.error_message = "Error contacting API. Try again later."
+                return;
+            }
+            this.error_message = error.response;
         });
     }
 }
