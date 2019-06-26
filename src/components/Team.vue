@@ -1,19 +1,24 @@
 <template>
   <div class="login">
-    <h1 class="title">Team: {{team_name}}</h1>
-    <article class="message is-danger" v-if='error'> 
-        <div class="message-header">
-            <p>Warning</p>
-            <button class="delete" aria-label="delete"></button>
-        </div>
-        <div class="message-body">
-            {{error}}
-        </div>
-    </article>
-    Members:
-    <p v-bind:key="user.username" v-for="user in users">
-        {{user}}
-    </p>
+    <div v-if="!loaded">
+        <fold color="#FD759B"></fold>
+    </div>
+    <div v-if="loaded">
+        <h1 class="title">Team: {{team_name}}</h1>
+        <article class="message is-danger" v-if='error'> 
+            <div class="message-header">
+                <p>Warning</p>
+                <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+                {{error}}
+            </div>
+        </article>
+        Members:
+        <p v-bind:key="user.username" v-for="user in users">
+            {{user}}
+        </p>
+    </div>
   </div>
 </template>
 
@@ -26,6 +31,7 @@ export default class Team extends Vue {
     users_ids: String[] = [];
     users: String[] = [];
     team_name: String = '';
+    loaded: boolean = false;
 
     error = '';
 
@@ -34,6 +40,7 @@ export default class Team extends Vue {
             user_ids: [],
             users: [],
             team_name: '',
+            loaded: false,
         }
     }
 
@@ -65,6 +72,7 @@ export default class Team extends Vue {
                     }
                 }).then((response) => {
                     this.users.push(response.data.content.username);
+                    this.loaded = true;
                 }).catch((error) => {
                     this.error = error
                 })

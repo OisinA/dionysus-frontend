@@ -4,15 +4,17 @@ import VueRouter from 'vue-router';
 import VueCookies from 'vue-cookies'
 import VueSpinners from 'vue-spinners'
 import Home from './components/Home.vue';
-import Login from './components/Login.vue';
+import Login from './components/auth/Login.vue';
 import Profile from './components/Profile.vue';
-import Logout from './components/Logout.vue';
+import Logout from './components/auth/Logout.vue';
 import Team from './components/Team.vue';
+import Problems from './components/problems/Problems.vue';
+import Problem from './components/problems/Problem.vue';
 
 Vue.config.productionTip = false;
 Vue.use(VueRouter);
 Vue.use(VueCookies);
-Vue.use(VueSpinners)
+Vue.use(VueSpinners);
 
 const routes = [
       {
@@ -34,6 +36,14 @@ const routes = [
       {
         path: '/team/:team_id',
         component: Team,
+      },
+      {
+        path: '/problem',
+        component: Problems,
+      },
+      {
+        path: '/problem/:problem_id',
+        component: Problem,
       },
 ];
 

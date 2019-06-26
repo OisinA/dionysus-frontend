@@ -4,7 +4,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
 
       <div class="navbar-brand">
-        <h1 class="dionysus navbar-item"><a href="/" class="dionysus">dionysus</a></h1>
+        <p class="dionysus navbar-item"><a href="/" class="dionysus">dionysus</a></p>
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -15,6 +15,7 @@
       <div id="mainNavbar" class="navbar-menu">
         <div class="navbar-start">
           <router-link to="/" class="navbar-item">Home</router-link>
+          <router-link v-if="this.$cookies.get('token')" to="/problem" class="navbar-item">Problems</router-link>
         </div>
         <div class="navbar-end">
           <router-link to="/login" class="navbar-item" href="#login">{{this.$cookies.get("token") ? 'Profile' : 'Login'}}</router-link>

@@ -82,7 +82,8 @@ export default class Profile extends Vue {
                     User_ID: this.user_id,
                 },
             }).then((response) => {
-                if(Object.keys(response.data.content).length == 0){
+                if(Object.keys(response.data.content).length == 0) {
+                    this.loaded = true;
                     return;
                 }
                 axios.get('http://localhost:8070/team/' + Object.keys(response.data.content)[0], {
@@ -91,20 +92,21 @@ export default class Profile extends Vue {
                     }
                 }).then((response) => {
                     this.team_data = response.data.content;
-                    console.log(this.team_data)
-                    //this.team_button = `
-                    //Team: <router-link :to="{ path: 'team', params: {team_id: team_data._id} }">` + this.team_data.team_name + `</router-link>
-                    //`;
-                    this.team_button = '{ path: "team", params: {team_id: ' + this.team_data._id + '} }'
                     this.loaded = true;
                 }).catch((error) => {
                     this.error = error;
+                    this.$cookies.remove('token');
+                    this.$router.push('/login');
                 })
             }).catch((error) => {
                 this.error = error;
+                this.$cookies.remove('token');
+                this.$router.push('/login');
             })
         }).catch((error) => {
             this.error = error;
+            this.$cookies.remove('token');
+            this.$router.push('/login');
         });
     }
 }
