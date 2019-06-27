@@ -64,7 +64,7 @@ export default class Problems extends Vue {
             }
         }).then((response) => {
             this.problems = response.data.content;
-            axios.get('http://localhost:8070/submission', {
+            axios.get('http://localhost:8070/scores', {
                 headers: {
                     Token: this.$cookies.get("token"),
                 }

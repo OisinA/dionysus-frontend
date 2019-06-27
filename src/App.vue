@@ -4,7 +4,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
 
       <div class="navbar-brand">
-        <p class="dionysus navbar-item"><a href="/" class="dionysus">dionysus</a></p>
+        <p class="dionysus navbar-item"><a href="/" class="dionysus">{{name ? name : "dionysus"}}</a></p>
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="mainNavbar">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -41,7 +41,21 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import axios from 'axios';
 export default class App extends Vue {
-    
+    name: string = '';
+
+    data() {
+        return {
+            name: '',
+        }
+    }
+
+    mounted() {
+        axios.get('http://localhost:8070/settings').then((response) => {
+            this.name = response.data.content.name;
+        }).catch((error) => {
+        })
+    }
 }
 </script>

@@ -13,13 +13,21 @@
                     {{error}}
                 </div>
             </article>
-            <article class="message is-success" v-if='success'> 
+            <article class="message is-warning" v-if='pending'> 
                 <div class="message-header">
-                    <p>Success</p>
+                    <p>Pending</p>
                     <button class="delete" aria-label="delete"></button>
                 </div>
                 <div class="message-body">
                     <fold color="#FD759B"></fold>
+                </div>
+            </article>
+            <article class="message is-success" v-if='success'> 
+                <div class="message-header">
+                    <p>Success</p>
+                </div>
+                <div class="message-body">
+                    {{success}}
                 </div>
             </article>
             <div class="section">
@@ -72,8 +80,12 @@ export default class Problem extends Vue {
     problem_name = '';
     problem_content = '';
 
+    submission_id = '';
+
     error = '';
+    pending = false;
     success = '';
+    score = 0;
 
     loaded = false;
 
@@ -81,6 +93,8 @@ export default class Problem extends Vue {
         return {
             problem_name: '',
             problem_content: '',
+            submission_id: '',
+            score: 0,
             error: '',
             success: '',
             loaded: false,
@@ -88,28 +102,79 @@ export default class Problem extends Vue {
     }
 
     send_answer() {
+        if(this.pending) {
+            return;
+        }
+        this.success = '';
+        this.error = '';
         let form_data = new FormData()
         let ref: HTMLInputElement = this.$refs.answer as HTMLInputElement;
         if(!ref){
             return;
         }
         let file = ref!.files![0]
+        if(!file) {
+            return;
+        }
         form_data.append('answer', file)
         let ref1: HTMLInputElement = this.$refs.source as HTMLInputElement;
         if(!ref1){
             return;
         }
         let file1 = ref1!.files![0]
+        if(!file!) {
+            return;
+        }
         form_data.append('source', file1)
+        ref.type = "text";
+        ref.type = "file";
+        ref1.type = "text";
+        ref1.type = "file";
         axios.post('http://localhost:8070/submission/' + this.$route.params.problem_id, form_data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Token': this.$cookies.get("token"),
             }
         }).then((response) => {
-            if(response.data.content == "success") {
-                this.success = "Submission sent. Check problems page for your score.";
-            }
+            this.submission_id = response.data.content;
+            this.pending = true;
+            let interval_id = window.setInterval(() => {
+                axios.get('http://localhost:8070/submission/' + this.submission_id, {
+                    headers: {
+                        'Token': this.$cookies.get("token"),
+                    }
+                }).then((response) => {
+                    console.log(response.data)
+                    if(response.data.content.status == 2) {
+                        this.success = "Submission scored!";
+                        this.pending = false;
+                        axios.get('http://localhost:8070/submission/' + this.submission_id + "/score", {
+                            headers: {
+                                Token: this.$cookies.get("token"),
+                            }
+                        }).then((response) => {
+                            this.score = response.data.content;
+                            if(this.score == 0) {
+                                this.success = "Submission scored! You scored 0 points. :("
+                            } else {
+                                this.success = this.success + " You scored " + this.score + " points.";
+                            }
+                            window.clearInterval(interval_id);
+                            return;
+                        }).catch((error) => {
+                            this.error = error;
+                            this.pending = false;
+                            window.clearInterval(interval_id);
+                            return;
+                        })
+                    }
+                }).catch((error) => {
+                    this.error = error;
+                    this.pending = false;
+                    window.clearInterval(interval_id);
+                    return;
+                })
+            }, 5000);
         }).catch((error) => {
             this.error = error;
         })
