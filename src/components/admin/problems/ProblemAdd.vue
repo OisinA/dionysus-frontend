@@ -1,8 +1,15 @@
 <template>
     <div class="add_problem">
         <div class="container">
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><router-link to="/admin">Admin</router-link></li>
+                    <li><a href="#" aria-current="page">Add Problem</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="section">
             <p class="title">Add Problem</p>
-            <p class="subtitle"><router-link to='/admin'>Back</router-link></p>
             <form class="form">
                 <div v-if="error_message" class="field">
                     <article class="message is-danger"> 
@@ -74,7 +81,25 @@ export default class ProblemAdd extends Vue {
     }
 
     add_problem() {
-        
+        if(!(this.name && this.content && this.answer)) {
+            this.error_message = "Fields are required."
+            return;
+        }
+        axios.post(process.env.VUE_APP_API_ENDPOINT + '/problem', {
+            "Name": this.name,
+            "Content": this.content,
+            "Answer": this.answer,
+        }, {
+            headers: {
+                "Token": this.$cookies.get("token"),
+            }
+        }).then((response) => {
+            if(response.data.content == "success") {
+                this.success_message = "Success";
+            }
+        }).catch((error) => {
+            this.error_message = error;
+        })
     }
 
 }

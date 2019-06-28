@@ -1,8 +1,15 @@
 <template>
     <div class="settings">
         <div class="container">
+            <nav class="breadcrumb" aria-label="breadcrumbs">
+                <ul>
+                    <li><router-link to="/admin">Admin</router-link></li>
+                    <li><a href="#" aria-current="page">Settings</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="section">
             <p class="title">Settings</p>
-            <p class="subtitle"><router-link to='/admin'>Back</router-link></p>
             <form class="form">
                 <div v-if="error_message" class="field">
                     <article class="message is-danger"> 
@@ -71,7 +78,7 @@ export default class Settings extends Vue {
     }
 
     update_settings() {
-        axios.post("http://localhost:8070/settings", {
+        axios.post(process.env.VUE_APP_API_ENDPOINT + "/settings", {
             name: this.name,
             homepage: this.homepage,
         }, {
@@ -88,7 +95,7 @@ export default class Settings extends Vue {
     }
 
     mounted() {
-        axios.get('http://localhost:8070/settings').then((response) => {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/settings').then((response) => {
             this.name = response.data.content.name;
             this.homepage = response.data.content.homepage;
             this.loaded = true;

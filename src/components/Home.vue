@@ -27,7 +27,7 @@ export default class Home extends Vue {
     }
 
     mounted() {
-        axios.get('http://localhost:8070/home_summary').then((response) => {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/home_summary').then((response) => {
             this.home_data = Marked.parse(response.data.content)
             this.loaded = true;
         }).catch((error) => {

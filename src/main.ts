@@ -10,12 +10,15 @@ import Logout from './components/auth/Logout.vue';
 import Team from './components/Team.vue';
 import Problems from './components/problems/Problems.vue';
 import Problem from './components/problems/Problem.vue';
+import Submissions from './components/problems/Submissions.vue';
+import Leaderboard from './components/Leaderboard.vue';
 
 import AdminApp from './components/admin/AdminApp.vue';
 import AdminHome from './components/admin/AdminHome.vue';
 import UserApp from './components/admin/users/UserApp.vue';
 import UserAdd from './components/admin/users/UserAdd.vue';
 import UserList from './components/admin/users/UserList.vue';
+import UserGet from './components/admin/users/UserGet.vue';
 import ProblemApp from './components/admin/problems/ProblemApp.vue';
 import ProblemAdd from './components/admin/problems/ProblemAdd.vue';
 import ProblemList from './components/admin/problems/ProblemList.vue';
@@ -45,6 +48,10 @@ const routes = [
         component: Logout,
       },
       {
+        path: '/submission',
+        component: Submissions,
+      },
+      {
         path: '/team/:team_id',
         component: Team,
       },
@@ -55,6 +62,10 @@ const routes = [
       {
         path: '/problem/:problem_id',
         component: Problem,
+      },
+      {
+        path: '/leaderboard',
+        component: Leaderboard,
       },
 
       {
@@ -80,7 +91,11 @@ const routes = [
               {
                 path: '/admin/user/list',
                 component: UserList,
-              }
+              },
+              {
+                path: '/admin/user/:user_id',
+                component: UserGet,
+              },
             ]
           },
           {

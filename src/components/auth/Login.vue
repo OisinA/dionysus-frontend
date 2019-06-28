@@ -25,7 +25,7 @@
         </div>
         <div class="field">
             <div class="control">
-                <button class="button pinkButton" v-on:click="login()">Login</button>
+                <button class="button pinkButton" v-on:click.prevent="login()">Login</button>
             </div>
         </div>
     </form>
@@ -57,14 +57,26 @@ export default class Login extends Vue {
     }
 
     login() {
-        axios.post('http://localhost:8070/login', {
+        if(!(this.username && this.password)) {
+            return;
+        }
+        axios.post(process.env.VUE_APP_API_ENDPOINT + '/login', {
             Username: this.username,
             Password: this.password,
         }).then((response) => {
-            this.$cookies.set("token", response.data.content.token);
-            this.$router.push('/profile');
+            if(response.data.content.token) {
+                this.$cookies.set("token", response.data.content.token);
+                this.$router.push('/profile');
+            } else {
+                this.error_message = "Error contacting API. Try again later."
+                this.username = '';
+                this.password = '';
+                return;
+            }
         }).catch((error) => {
             console.log(error);
+            this.username = '';
+            this.password = '';
             if(error.response.data.status_code == 403) {
                 this.error_message = "Login details incorrect.";
                 return;

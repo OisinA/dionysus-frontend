@@ -130,7 +130,7 @@ export default class Problem extends Vue {
         ref.type = "file";
         ref1.type = "text";
         ref1.type = "file";
-        axios.post('http://localhost:8070/submission/' + this.$route.params.problem_id, form_data, {
+        axios.post(process.env.VUE_APP_API_ENDPOINT + '/submission/' + this.$route.params.problem_id, form_data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Token': this.$cookies.get("token"),
@@ -139,7 +139,7 @@ export default class Problem extends Vue {
             this.submission_id = response.data.content;
             this.pending = true;
             let interval_id = window.setInterval(() => {
-                axios.get('http://localhost:8070/submission/' + this.submission_id, {
+                axios.get(process.env.VUE_APP_API_ENDPOINT + '/submission/' + this.submission_id, {
                     headers: {
                         'Token': this.$cookies.get("token"),
                     }
@@ -148,7 +148,7 @@ export default class Problem extends Vue {
                     if(response.data.content.status == 2) {
                         this.success = "Submission scored!";
                         this.pending = false;
-                        axios.get('http://localhost:8070/submission/' + this.submission_id + "/score", {
+                        axios.get(process.env.VUE_APP_API_ENDPOINT + '/submission/' + this.submission_id + "/score", {
                             headers: {
                                 Token: this.$cookies.get("token"),
                             }
@@ -185,7 +185,7 @@ export default class Problem extends Vue {
             this.$router.push('/login')
         }
         let u = '';
-        axios.get('http://localhost:8070/problem/' + this.$route.params.problem_id, {
+        axios.get('http://10.10.1.150:8070/problem/' + this.$route.params.problem_id, {
             headers: {
                 Token: this.$cookies.get("token"),
             }
@@ -194,9 +194,7 @@ export default class Problem extends Vue {
             this.problem_content = Marked.parse(response.data.content.content);
             this.loaded = true;
         }).catch((error) => {
-            this.error = error;
-            this.$cookies.remove('token');
-            this.$router.push('/login');
+            this.$router.push("/problem");
         });
     }
 }

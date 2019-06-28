@@ -16,6 +16,8 @@
         <div class="navbar-start">
           <router-link to="/" class="navbar-item">Home</router-link>
           <router-link v-if="this.$cookies.get('token')" to="/problem" class="navbar-item">Problems</router-link>
+          <router-link v-if="this.$cookies.get('token')" to="/submission" class="navbar-item">Submissions</router-link>
+          <router-link v-if="this.$cookies.get('token')" to="/leaderboard" class="navbar-item">Leaderboard</router-link>
         </div>
         <div class="navbar-end">
           <router-link to="/login" class="navbar-item" href="#login">{{this.$cookies.get("token") ? 'Profile' : 'Login'}}</router-link>

@@ -4,25 +4,31 @@
             <fold color="#FD759B"></fold>
         </div>
         <div v-if="loaded">
-            <h1 class="title">Profile</h1>
-            <article class="message is-danger" v-if='error'> 
-                <div class="message-header">
-                    <p>Warning</p>
-                    <button class="delete" aria-label="delete"></button>
-                </div>
-                <div class="message-body">
-                    {{error}}
-                </div>
-            </article>
-            <p>
-                Username: {{user_data.username}}
-            </p>
-            <p>
-                Email: {{user_data.email}}
-            </p>
-            <p v-if="team_data._id">
-                Team: <router-link :to="/team/ + team_data._id">{{team_data.team_name}}</router-link>
-            </p>
+            <div class="section">
+                <h1 class="title">Profile</h1>
+                <article class="message is-danger" v-if='error'> 
+                    <div class="message-header">
+                        <p>Warning</p>
+                        <button class="delete" aria-label="delete"></button>
+                    </div>
+                    <div class="message-body">
+                        {{error}}
+                    </div>
+                </article>
+                <p>
+                    Username: {{user_data.username}}
+                </p>
+                <p>
+                    Email: {{user_data.email}}
+                </p>
+                <p v-if="team_data._id">
+                    Team: <router-link :to="/team/ + team_data._id">{{team_data.team_name}}</router-link>
+                </p>
+                <router-link to="/logout">Logout</router-link>
+            </div>
+            <div class="section" v-if="user_data.role > 0">
+                <router-link to="/admin">Admin Panel</router-link>
+            </div>
         </div>
     </div>
 </template>
@@ -58,14 +64,14 @@ export default class Profile extends Vue {
             this.$router.push('/login')
         }
         let u = '';
-        axios.get('http://localhost:8070/token_to_id', {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/token_to_id', {
             headers: {
                 Token: this.$cookies.get("token"),
             }
         }).then((response) => {
             this.user_id = response.data.content.user_id;
         }).then((response) => {
-            axios.get('http://localhost:8070/user/' + this.user_id, {
+            axios.get(process.env.VUE_APP_API_ENDPOINT + '/user/' + this.user_id, {
                 headers: {
                     Token: this.$cookies.get("token"),
                 }
@@ -74,7 +80,7 @@ export default class Profile extends Vue {
             }).catch((error) => {
                 this.error = error
             })
-            axios.get('http://localhost:8070/team_members', {
+            axios.get(process.env.VUE_APP_API_ENDPOINT + '/team_members', {
                 headers: {
                     Token: this.$cookies.get("token"),
                 },
@@ -86,7 +92,7 @@ export default class Profile extends Vue {
                     this.loaded = true;
                     return;
                 }
-                axios.get('http://localhost:8070/team/' + Object.keys(response.data.content)[0], {
+                axios.get(process.env.VUE_APP_API_ENDPOINT + '/team/' + Object.keys(response.data.content)[0], {
                     headers: {
                         Token: this.$cookies.get("token"),
                     }

@@ -50,7 +50,7 @@ export default class Team extends Vue {
             return;
         }
         let team_id = this.$route.params.team_id;
-        axios.get('http://localhost:8070/team/' + team_id, {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/team/' + team_id, {
             headers: {
                 Token: this.$cookies.get("token"),
             }
@@ -59,14 +59,14 @@ export default class Team extends Vue {
         }).catch((error) => {
             this.error = error;
         })
-        axios.get('http://localhost:8070/team_members?Team_ID=' + team_id, {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/team_members?Team_ID=' + team_id, {
             headers: {
                 Token: this.$cookies.get("token"),
             }
         }).then((response) => {
             this.users_ids = (response.data.content[Object.keys(response.data.content)[0]] as unknown) as String[];
             for(let i in this.users_ids) {
-                axios.get('http://localhost:8070/user/' + this.users_ids[i], {
+                axios.get(process.env.VUE_APP_API_ENDPOINT + '/user/' + this.users_ids[i], {
                     headers: {
                         Token: this.$cookies.get("token"),
                     }

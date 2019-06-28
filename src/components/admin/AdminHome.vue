@@ -4,6 +4,13 @@
             <fold color="#FD759B"></fold>
         </div>
         <div v-if="loaded">
+            <div class="container">
+                <nav class="breadcrumb" aria-label="breadcrumbs">
+                    <ul>
+                        <li><a href="#" aria-current="page">Admin</a></li>
+                    </ul>
+                </nav>
+            </div>
             <div class="section">
                 <p class="title">dionysus-admin</p>
                 <p class="subtitle">manage your dionysus instance</p>
@@ -29,7 +36,7 @@
                                 <router-link to="/admin/user/add">Add User</router-link>
                             </li>
                             <li class="list-item">
-                                <router-link to="/admin/user/list">List Users</router-link>
+                                <router-link to="/admin/user/list">User List</router-link>
                             </li>
                         </ul>
                     </li>
@@ -39,14 +46,14 @@
                                 <router-link to="/admin/problem/add">Add Problem</router-link>
                             </li>
                             <li class="list-item">
-                                <router-link to="/admin/problem/list">List Problems</router-link>
+                                <router-link to="/admin/problem/list">Problem List</router-link>
                             </li>
                         </ul>
                     </li>
                     <li class="list-item">Submission
                         <ul>
                             <li class="list-item">
-                                <router-link to="/admin/submissions">List Submissions</router-link>
+                                <router-link to="/admin/submissions">Submission List</router-link>
                             </li>
                         </ul>
                     </li>
@@ -77,7 +84,7 @@ export default class AdminHome extends Vue {
     }
 
     mounted() {
-        axios.get('http://localhost:8070/user', {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/user', {
             headers: {
                 'Token': this.$cookies.get("token"),
             }
@@ -86,7 +93,7 @@ export default class AdminHome extends Vue {
         }).catch((error) => {
             this.users = error;
         });
-        axios.get('http://localhost:8070/team', {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/team', {
             headers: {
                 'Token': this.$cookies.get("token"),
             }

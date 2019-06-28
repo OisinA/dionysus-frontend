@@ -1,10 +1,10 @@
 <template>
-    <div class="problems" >
+    <div class="leaderboard">
         <div v-if="!loaded">
             <fold color="#FD759B"></fold>
         </div>
         <div v-if="loaded">
-            <h1 class="title">Problems</h1>
+            <h1 class="title">Leaderboard</h1>
             <article class="message is-danger" v-if='error'> 
                 <div class="message-header">
                     <p>Warning</p>
@@ -18,20 +18,14 @@
                 <table class="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
-                            <th>Problem Name</th>
+                            <th>Username</th>
                             <th>Score</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Total</th>
-                            <th>{{total}}</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
-                        <tr v-bind:key="problem" v-for="problem in Object.keys(problems)">
-                            <td><router-link :to="/problem/ + problem">{{problems[problem]}}</router-link></td>
-                            <td>{{scores[problem] ? scores[problem] : 0}}</td>
+                        <tr v-bind:key="score" v-for="score in Object.keys(scores)">
+                            <td>{{score}}</td>
+                            <td>{{scores[score]}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -45,10 +39,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import axios from 'axios'
 
 @Component
-export default class Problems extends Vue {
-    problems = {};
+export default class Leaderboard extends Vue {
     scores = {};
-    total = 0;
 
     error = '';
 
@@ -56,9 +48,7 @@ export default class Problems extends Vue {
 
     data() {
         return {
-            problems: {},
             scores: {},
-            total: 0,
             error: '',
             loaded: false,
         }
@@ -68,27 +58,15 @@ export default class Problems extends Vue {
         if(!this.$cookies.get("token")) {
             this.$router.push('/login')
         }
-        axios.get(process.env.VUE_APP_API_ENDPOINT + '/problem', {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/leaderboard', {
             headers: {
                 Token: this.$cookies.get("token"),
             }
         }).then((response) => {
-            this.problems = response.data.content;
-            axios.get(process.env.VUE_APP_API_ENDPOINT + '/scores', {
-                headers: {
-                    Token: this.$cookies.get("token"),
-                }
-            }).then((response) => {
-                this.scores = response.data.content;
-                for(let key in this.scores) {
-                    this.total += this.scores[key];
-                }
-                this.loaded = true;
-            })
+            this.scores = response.data.content;
+            this.loaded = true;
         }).catch((error) => {
             this.error = error;
-            this.$cookies.remove('token');
-            this.$router.push('/login');
         });
     }
 }
