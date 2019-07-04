@@ -185,7 +185,7 @@ export default class Problem extends Vue {
             this.$router.push('/login')
         }
         let u = '';
-        axios.get('http://10.10.1.150:8070/problem/' + this.$route.params.problem_id, {
+        axios.get(process.env.VUE_APP_API_ENDPOINT + '/problem/' + this.$route.params.problem_id, {
             headers: {
                 Token: this.$cookies.get("token"),
             }
