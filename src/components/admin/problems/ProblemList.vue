@@ -83,7 +83,6 @@ export default class AdminAppProblemList extends Vue {
         }).then((response) => {
             if(response.data.content == "success") {
                 this.success_message = "Problem deleted!";
-                delete this.problems[problem]
             }
         }).catch((error) => {
             this.error_message = error;
