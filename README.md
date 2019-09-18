@@ -1,5 +1,7 @@
 # dionysus
 
+![dionysus in use](https://github.com/OisinA/dionysus-frontend/raw/master/dionysus.png)
+
 ## Project setup
 ```
 npm install
